@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 const PLUGIN = "skill-curator";
 const PACKAGE = `@agent-sh/${PLUGIN}`;
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 const REPO = `https://github.com/agent-sh/${PLUGIN}`;
 
 const requiredPackageFiles = [

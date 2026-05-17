@@ -1,7 +1,7 @@
 ---
 name: skill-curator
 description: "Use when user asks to create, improve, or review production-grade SKILL.md files for Claude Code, Cursor, Codex, OpenCode, Kiro, and other agent tools. Focuses on trigger quality, structure, cross-tool compatibility, and reliable activation."
-version: 1.0.0
+version: 1.0.1
 argument-hint: "[skill-purpose or --improve path/to/SKILL.md] [--category implementation|review|research|orchestration|analysis] [--minimal]"
 ---
 
@@ -38,7 +38,7 @@ Every skill must start with a clean frontmatter block:
 ---
 name: <kebab-case-name>                    # 3-8 words, lowercase, hyphens
 description: <imperative trigger phrase>   # 1-3 sentences, ≤ 512 chars
-version: 1.0.0
+version: 1.0.1
 argument-hint: "[optional args]"           # Shown in /help and slash command
 allowed-tools: Bash, Read, Edit, ...       # Restrict when possible
 ---

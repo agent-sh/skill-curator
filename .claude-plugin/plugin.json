@@ -1,6 +1,6 @@
 {
   "name": "skill-curator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Curate production-grade SKILL.md files for autonomous coding agents across Claude Code, Cursor, Codex, OpenCode, Kiro, and other tools",
   "author": {
     "name": "Avi Fenesh",

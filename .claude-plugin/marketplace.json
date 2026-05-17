@@ -1,7 +1,7 @@
 {
   "name": "skill-curator",
   "description": "Canonical guidance for writing, reviewing, and maintaining production-grade SKILL.md files",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "owner": {
     "name": "Avi Fenesh",
     "url": "https://github.com/avifenesh"
@@ -18,7 +18,7 @@
       "name": "skill-curator",
       "source": ".",
       "description": "Create and improve reliable, cross-tool SKILL.md files with strong activation triggers and validation guidance",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "category": "development"
     }
   ]
