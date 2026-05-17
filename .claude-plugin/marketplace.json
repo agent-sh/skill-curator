@@ -1,0 +1,25 @@
+{
+  "name": "skill-curator",
+  "description": "Canonical guidance for writing, reviewing, and maintaining production-grade SKILL.md files",
+  "version": "1.0.0",
+  "owner": {
+    "name": "Avi Fenesh",
+    "url": "https://github.com/avifenesh"
+  },
+  "repository": "https://github.com/agent-sh/skill-curator",
+  "keywords": [
+    "skill-curator",
+    "skills",
+    "agent-config",
+    "agnix"
+  ],
+  "plugins": [
+    {
+      "name": "skill-curator",
+      "source": ".",
+      "description": "Create and improve reliable, cross-tool SKILL.md files with strong activation triggers and validation guidance",
+      "version": "1.0.0",
+      "category": "development"
+    }
+  ]
+}
