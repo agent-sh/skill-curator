@@ -1,6 +1,6 @@
 ---
 name: skill-curator
-description: "Curate production-grade SKILL.md files for autonomous coding agents. Use when creating, improving, or reviewing skills for Claude Code, Cursor, Codex, OpenCode, Kiro, and other agent tools. Focuses on trigger quality, structure, cross-tool compatibility, and reliable activation."
+description: "Use when user asks to create, improve, or review production-grade SKILL.md files for Claude Code, Cursor, Codex, OpenCode, Kiro, and other agent tools. Focuses on trigger quality, structure, cross-tool compatibility, and reliable activation."
 version: 1.0.0
 argument-hint: "[skill-purpose or --improve path/to/SKILL.md] [--category implementation|review|research|orchestration|analysis] [--minimal]"
 ---

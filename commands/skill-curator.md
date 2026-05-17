@@ -17,3 +17,21 @@ When the user provides a purpose or an existing file to improve:
 6. Recommend testing with `agnix`.
 
 Always output the final skill in a clean markdown code block.
+
+## Example
+
+Input:
+`/skill-curator "create a skill for reviewing background jobs"`
+
+Output:
+```markdown
+---
+name: background-job-review
+description: "Use when user asks to review background job queues, workers, schedulers, or retry logic..."
+---
+...
+```
+
+## Output Format
+
+Return the complete `SKILL.md` content, a short critique when improving an existing skill, an estimated token budget, recommended `allowed-tools`, and realistic trigger-test prompts.

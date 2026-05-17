@@ -24,7 +24,7 @@ test("command delegates to the skill and the skill has a strong trigger", () => 
   const command = readFileSync("commands/skill-curator.md", "utf8");
 
   assert.match(skill, /^name: skill-curator$/m);
-  assert.match(skill, /description: "Curate production-grade SKILL\.md files/);
+  assert.match(skill, /description: "Use when user asks to create, improve, or review production-grade SKILL\.md files/);
   assert.match(skill, /Skip unless/);
   assert.match(command, /skills\/skill-curator\/SKILL\.md/);
 });
