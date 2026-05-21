@@ -73,7 +73,7 @@ test("published package contract is internally consistent", () => {
   assert.equal(marketplace.plugins.length, 1);
   assert.deepEqual(marketplace.plugins[0], {
     name: PLUGIN,
-    source: ".",
+    source: "./",
     description:
       "Create and improve reliable, cross-tool SKILL.md files with strong activation triggers and validation guidance",
     version: pkg.version,
