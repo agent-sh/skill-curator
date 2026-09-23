@@ -1,169 +1,80 @@
 ---
 name: skill-curator
-description: "Use when user asks to create, improve, or review production-grade SKILL.md files for Claude Code, Cursor, Codex, OpenCode, Kiro, and other agent tools. Focuses on trigger quality, structure, cross-tool compatibility, and reliable activation."
-version: 1.0.1
+description: Use when the user wants to create, improve or review a SKILL.md file (Agent Skills format) for any agent tool, including tuning when a skill triggers.
+version: 1.1.0
 argument-hint: "[skill-purpose or --improve path/to/SKILL.md] [--category implementation|review|research|orchestration|analysis] [--minimal]"
 ---
 
 # Skill Curator
 
-Expert guidance for writing high-quality, reliable `SKILL.md` files that work consistently across the entire agent ecosystem (Claude Code, Cursor, Codex, OpenCode, Kiro, Gemini CLI, and others).
+Write or improve a `SKILL.md` so it triggers on the right requests and gives the agent what it would otherwise get wrong. Skills follow the Agent Skills format (agentskills.io), which Claude Code, Codex, OpenCode, Cursor, Gemini CLI, Kiro and others load.
 
-## Parse Arguments
+## Arguments
 
-Use `$ARGUMENTS` as the requested skill purpose, improvement target, category, and scope flags:
+`$ARGUMENTS` holds the purpose of a new skill, or `--improve <path>` to rework an existing one. `--category implementation|review|research|orchestration|analysis` names the kind of work the skill guides, which shapes its body (a review skill lists what to look for; an implementation skill gives procedures and gotchas). `--minimal` means the smallest skill that does the job, with no optional sections.
 
-```text
-$ARGUMENTS
-```
+## What a skill is for
 
-- `--improve <path>` means read the existing `SKILL.md`, critique it, then rewrite or patch it.
-- `--category implementation|review|research|orchestration|analysis` sets the skill's primary workflow style.
-- `--minimal` means keep the result compact and omit optional examples.
+The agent reads every skill's `name` and `description` at startup and loads the body only when a task matches. So the description decides whether the skill is ever used, and the body competes for attention with everything else in context once it is. A good skill carries what only its author knows: project conventions, domain procedures, non-obvious edge cases, the exact tools or commands to use, and the reasons behind its constraints. It leaves out what a current model already does well, such as explaining what HTTP is, telling it to be thorough, or scripting steps it would plan on its own.
 
-## Why Skills Matter
+Ask of every line: would the agent get this wrong without it? If not, cut it. If you are unsure, test it.
 
-Skills are the primary mechanism for giving agents specialized, on-demand knowledge without bloating every context window. A good skill:
-- Activates reliably when relevant (strong trigger phrases)
-- Loads only the necessary content (router pattern or tight scope)
-- Survives model changes and tool updates
-- Passes `agnix` validation with zero errors/warnings
-- Provides clear, actionable guidance with "Skip unless" gates
+## Frontmatter
 
-## Frontmatter Standards
+Required by the spec:
 
-Every skill must start with a clean frontmatter block:
+- `name`: 1-64 characters, lowercase letters, digits and single hyphens, no leading or trailing hyphen, and it must match the skill's directory name.
+- `description`: 1-1024 characters, saying what the skill does and when to use it.
 
-```yaml
----
-name: <kebab-case-name>                    # 3-8 words, lowercase, hyphens
-description: <imperative trigger phrase>   # 1-3 sentences, ≤ 512 chars
-version: 1.0.1
-argument-hint: "[optional args]"           # Shown in /help and slash command
-allowed-tools: Bash, Read, Edit, ...       # Restrict when possible
----
-```
+Optional in the spec: `license`, `compatibility` (environment needs, up to 500 characters, rarely needed), `metadata` (string map), `allowed-tools` (space-separated pre-approved tools; experimental, support varies). Clients add their own fields, such as `argument-hint` or `disable-model-invocation` in Claude Code; use them when the target tool supports them and expect other tools to ignore them.
 
-### Description (Trigger Phrase) Rules — Most Important Field
+## The description
 
-The `description` is the primary activation signal. Models use it heavily for routing.
+The description does routing, not teaching. Write it as an instruction about when to act ("Use when..."), phrased in terms of what the user is trying to do rather than how the skill works. Name the situations it covers, including the ones where the user does not name the domain, and state the boundary with neighboring skills when requests could be confused. One to three sentences is usually enough; a list of near-synonym trigger phrases costs tokens in every session and generalizes worse than naming the category of intent.
 
-**Requirements:**
-- Start with an **imperative verb phrase**: "Use when...", "Write when...", "Review when...", "Analyze when..."
-- Be **specific** — mention file paths, function names, command names, or concrete situations
-- Use vocabulary that will actually appear in user prompts or PR/issue text
-- Include **negative signals** ("Does NOT apply to...") when scope could bleed
-- Keep under 512 characters
+Skills tend to under-trigger, so a description may lean assertive about when it applies. Tune that against a trigger eval rather than by adding emphasis: see `references/trigger-evals.md`.
 
-**Good examples:**
-- "Use when adding or modifying background job queues, workers, or schedulers in Node.js or TypeScript projects."
-- "Review when a PR touches cluster replication, failover logic, or handshake code in the C server."
-- "Use when the user wants to create or improve a production-grade SKILL.md file for any agent tool."
+## The body
 
-**Bad examples:**
-- "Helps with background jobs." (too vague, no trigger)
-- "I am an expert in queues." (first person, not imperative)
+There is no required format. What works for current models:
 
-## Body Structure (Recommended Order)
+- The goal and what done looks like, so the agent can plan its own route.
+- Constraints with their reasons. A reason lets the agent handle the cases the rule did not foresee; a bare MUST or NEVER gets over-applied.
+- Specificity matched to fragility. Where many approaches are fine, describe the outcome. Where exactly one sequence is safe (a migration, a release, a destructive command), give the exact commands and say not to vary them.
+- A default, with an escape hatch, instead of a menu of equal options.
+- Gotchas: concrete facts that defy reasonable assumptions ("the `users` table soft-deletes; filter on `deleted_at`").
+- An output template when the output format matters to a reader or a parser.
+- Scripts for deterministic work (parsing, validation, arithmetic). Code gives the same answer every time; prose asks the model to re-derive it.
 
-Use this order for maximum model attention:
+Keep `SKILL.md` under about 500 lines and 5,000 tokens. Move detailed reference material into `references/` and say when to read each file ("read `references/api-errors.md` when the API returns a non-200"), one level deep. See `references/patterns.md` for worked guidance on these patterns and on what to remove from older skills.
 
-1. **Purpose** (short)
-2. **Core Principles** or **When to Use**
-3. **Frontmatter Requirements** (if relevant)
-4. **Template / Structure**
-5. **Patterns** (with `Skip unless:` gates — mandatory for review/analysis skills)
-6. **Do NOT** / Anti-patterns
-7. **Workflow** (step-by-step for the skill's task)
-8. **Examples**
-9. **Constraints / Token Budget**
+## Cross-tool use
 
-### The "Skip unless" Rule (Critical for Reliability)
+Keep the body usable where a tool is missing. If the skill relies on a subagent, a question tool or web search, say what to do without it (do the work in-session, ask in plain text, work from local docs and say what could not be checked). Refer to plugin files by paths relative to the skill or plugin root. Where a client-specific field or tool name is needed, keep it in the frontmatter or clearly marked.
 
-Every pattern or decision rule **must** contain a `Skip unless:` line that names a concrete, checkable condition (file name, function, identifier, command output, etc.).
+## Improving an existing skill
 
-Without this, the skill fires too broadly and generates noise.
+Read it and its references, then look for:
 
-Example:
-```markdown
-### Missing error handling on async operations
-The diff looks correct but is dangerous when:
-- An async function is added or modified without try/catch or .catch()
+- A description that is vague, enumerates phrases, or describes mechanics instead of intent.
+- Dated prompting: all-caps MUST/NEVER/CRITICAL stacks, "think step by step", fixed step scripts for judgment work, repeated restatements, verification nudges after every step, long worked examples the model will copy, history of past incidents, hardcoded model names or dates.
+- Arithmetic or parsing written as prose that should be a script.
+- Claims about tools, versions or APIs that are no longer true. Check them.
+- Content the agent already knows.
 
-Skip unless: the changed file contains `async ` or `await ` and the function name appears in a call site without error handling.
-```
+Keep real safety constraints (once, with the reason), command names, arguments and any output format something parses.
 
-## Router Pattern (For Complex Skills)
+## Validate
 
-When a skill covers a broad domain, use the **router pattern**:
+Run `agnix <skill dir>` when agnix is installed and fix errors. Warnings about client-specific fields are expected when the skill targets one client. `skills-ref validate <skill dir>` from the Agent Skills project checks the frontmatter against the spec.
 
-- The main `SKILL.md` contains only frontmatter + a routing table.
-- It loads small, focused reference files on demand (`reference/specific-topic.md`).
-- This keeps initial context tiny while still providing deep knowledge.
+## Output
 
-See `valkey-skills` and `agent-knowledge` for production examples of this pattern.
+- The complete `SKILL.md` in one markdown code block, plus any reference files it points to.
+- When improving: a short critique of the old version, naming what was removed and why.
+- `allowed-tools` to declare, if any, and a token estimate for the body.
+- Trigger-test prompts: several that should trigger it and a few near-misses that should not.
 
-## Cross-Tool Compatibility
+## Done
 
-Skills should work (at minimum) with:
-- Claude Code (`.claude/skills/`)
-- Cursor (`.cursor/skills/`)
-- Codex CLI
-- OpenCode
-- Kiro
-- Gemini CLI (where supported)
-
-**Rules for broad compatibility:**
-- Avoid Claude-specific tool names in the skill body unless gated.
-- Prefer standard Bash + file tools when possible.
-- Use `allowed-tools` in frontmatter to declare dependencies.
-- Test with `agnix --target all` or multiple targets.
-
-## Length Budgets
-
-| Type              | Target Lines | Hard Max | Notes |
-|-------------------|--------------|----------|-------|
-| Simple skill      | 40-80        | 150      | One clear responsibility |
-| Standard skill    | 80-150       | 250      | Most common |
-| Router + references | 30-60 (main) + small refs | 400 total | Preferred for large domains |
-| Heavy institutional memory | 150-300 | 500 | Only when justified by density |
-
-Above 250 lines, the model starts ignoring later sections. Use routers instead of monolithic files.
-
-## Common Failure Modes (and Fixes)
-
-- **Vague description** → Never activates. Fix: Make it imperative and specific with real tokens from the domain.
-- **No "Skip unless"** → Fires on everything. Fix: Add concrete gate conditions for every pattern.
-- **Buried rules** → Model misses them. Fix: Put critical constraints (confidence ladder, always-on checks, Do NOT) near the top.
-- **First-person voice** → Breaks selection in some tools. Fix: Use third-person / imperative throughout.
-- **Tool-specific assumptions** → Breaks on other platforms. Fix: Declare tools in frontmatter and keep body generic where possible.
-- **Missing examples** → Agent doesn't know the expected output shape. Fix: Include at least one realistic before/after or full trajectory.
-
-## Workflow When Using This Skill
-
-1. Clarify the skill's purpose and target tools.
-2. Decide on scope (single-purpose vs router).
-3. Draft frontmatter with an excellent description.
-4. Choose structure and write the body following the template above.
-5. Add `Skip unless:` gates for every decision rule.
-6. Run `agnix` on the resulting file (zero errors required).
-7. Test activation with realistic prompts in the target tools.
-8. Add to the appropriate skill registry or plugin.
-
-## Output Requirements
-
-When asked to create or improve a skill, always return:
-- The complete `SKILL.md` content in a clean code block
-- A short critique of the previous version (if improving)
-- Token estimate for the frontmatter + body
-- Recommended `allowed-tools` list
-- Suggested test prompts that should trigger it
-
-## Constraints
-
-- Never write vague or marketing-style descriptions.
-- Never omit the `Skip unless:` requirement for pattern-based skills.
-- Never assume a specific tool's internal implementation details unless the skill is tool-specific.
-- Always optimize for reliable, low-noise activation over cleverness.
-
-_(Generic skill-curator guidance. Source: agent-sh/skill-curator)_
+The skill passes the spec's frontmatter rules, its description says when to use it in a few sentences, its body carries only what the agent would otherwise miss, and the user has test prompts to check triggering.

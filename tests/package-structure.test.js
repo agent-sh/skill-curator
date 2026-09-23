@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 const PLUGIN = "skill-curator";
 const PACKAGE = `@agent-sh/${PLUGIN}`;
-const VERSION = "1.0.1";
+const VERSION = "1.1.0";
 const REPO = `https://github.com/agent-sh/${PLUGIN}`;
 
 const requiredPackageFiles = [
@@ -98,17 +98,26 @@ test("skill frontmatter and body preserve routing quality", () => {
   assert.equal(fm.name, PLUGIN);
   assert.equal(fm.version, VERSION);
   assert.ok(fm.description.startsWith("Use when "));
-  assert.ok(fm.description.length <= 512);
+  assert.ok(fm.description.length <= 1024, "spec caps descriptions at 1024 characters");
+  assert.ok(fm.description.split(/\s+/).length <= 40, "trigger descriptions stay short");
   assert.match(fm.description, /SKILL\.md/);
-  assert.match(fm.description, /Claude Code, Cursor, Codex, OpenCode, Kiro/);
   assert.match(fm["argument-hint"], /--improve/);
 
   assert.ok(lineCount <= 250, `skill is too large (${lineCount} lines)`);
-  assert.match(skill, /Skip unless:/);
-  assert.match(skill, /Router Pattern/);
   assert.match(skill, /agnix/);
-  assert.match(skill, /Output Requirements/);
+  assert.match(skill, /## Output/);
+  assert.match(skill, /## Done/);
+
+  // The guidance itself must not teach dated prompting.
   assert.doesNotMatch(skill, /CRITICAL WARNING|FAILURE TO/i);
+  assert.doesNotMatch(skill, /Skip unless:/, "mandatory Skip-unless gates were valkey-reviewer specific");
+  assert.doesNotMatch(skill, /^\s*(?:[-*]\s*)?(?:\*\*)?(MUST|NEVER|ALWAYS)\b/m, "no all-caps rules in the guidance body");
+
+  // Every reference the skill points at ships with it.
+  for (const ref of ["references/trigger-evals.md", "references/patterns.md"]) {
+    assert.match(skill, new RegExp(ref.replace(".", "\\.")), `SKILL.md should point at ${ref}`);
+    assert.ok(existsSync(`skills/skill-curator/${ref}`), `missing ${ref}`);
+  }
 });
 
 test("slash command delegates to the skill and keeps the output contract", () => {

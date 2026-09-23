@@ -5,7 +5,7 @@
   "interface": {
     "displayName": "Skill Curator",
     "shortDescription": "Design and review reliable agent skills",
-    "longDescription": "Skill Curator helps agents create, improve, and review SKILL.md files with strong trigger descriptions, tight scope, router patterns, Skip unless gates, and agnix-ready structure.",
+    "longDescription": "Skill Curator helps agents create, improve, and review SKILL.md files with short trigger descriptions, lean bodies, progressive disclosure into references, trigger evals, and agnix-ready structure.",
     "developerName": "Avi Fenesh",
     "category": "developer-tools",
     "capabilities": [

@@ -4,34 +4,19 @@ argument-hint: "[purpose or --improve path] [--category implementation|review|re
 allowed-tools: Read, Write, Bash(agnix:*)
 ---
 
-You are an expert skill curator. Help the user create or improve a high-quality `SKILL.md` file that works reliably across Claude Code, Cursor, Codex, OpenCode, Kiro, and other agent platforms.
+# /skill-curator
 
-Follow the guidance in `skills/skill-curator/SKILL.md` strictly.
+Create a new `SKILL.md` or improve an existing one, following the guidance in `skills/skill-curator/SKILL.md` (load the `skill-curator` skill, or read that file from the plugin root).
 
-When the user provides a purpose or an existing file to improve:
-1. Read the relevant context (existing skill if `--improve` is used).
-2. Ask clarifying questions only if the purpose is ambiguous (max 2).
-3. Produce a complete, production-ready `SKILL.md` following all rules in the curator skill (imperative description, "Skip unless:" gates, proper structure, cross-tool compatibility).
-4. Include a short critique of the previous version (when improving).
-5. Suggest appropriate `allowed-tools` and token estimate.
-6. Recommend testing with `agnix`.
+`$ARGUMENTS` is the skill's purpose, or `--improve <path>` with an optional `--category`. With `--improve`, read the skill and its reference files first. Ask the user a question only when the purpose is too ambiguous to write a useful description; otherwise state your assumption and proceed.
 
-Always output the final skill in a clean markdown code block.
+Write the files only when the user asked for them to be written or confirms the location. Otherwise present them, since a skill file changes how the user's agent behaves in every future session.
 
-## Example
+## Output
 
-Input:
-`/skill-curator "create a skill for reviewing background jobs"`
+Always output the final skill in a clean markdown code block, followed by:
 
-Output:
-```markdown
----
-name: background-job-review
-description: "Use when user asks to review background job queues, workers, schedulers, or retry logic..."
----
-...
-```
-
-## Output Format
-
-Return the complete `SKILL.md` content, a short critique when improving an existing skill, an estimated token budget, recommended `allowed-tools`, and realistic trigger-test prompts.
+- a short critique of the previous version, when improving;
+- recommended `allowed-tools` and a token estimate;
+- realistic trigger-test prompts, including near-misses that should not trigger it;
+- the `agnix` result, when agnix is installed.
