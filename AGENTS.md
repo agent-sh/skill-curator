@@ -6,8 +6,8 @@ This repository maintains the canonical guidance for writing production-grade sk
 
 Produce skills that:
 - Activate reliably across Claude Code, Cursor, Codex, OpenCode, Kiro and other tools
-- Follow the router pattern when scope is broad
-- Contain concrete `Skip unless:` gates for every pattern
+- Keep the skill file short and move detail into `references/` when scope is broad
+- Carry what the agent would otherwise get wrong, with reasons, and nothing it already knows
 - Pass `agnix` validation cleanly
 - Remain useful after model upgrades
 
@@ -16,7 +16,7 @@ Produce skills that:
 - Treat the main `skills/skill-curator/SKILL.md` as the single source of truth for "how to write a skill".
 - Reflect any guidance change in the skill itself before considering the work complete.
 - New examples should be realistic and cross-tool.
-- Target under 250 lines for the core skill. Use references for deeper material when a topic needs more space.
+- Keep the core skill well under the spec's 500-line guidance. Use references for deeper material.
 
 ## Release Process
 

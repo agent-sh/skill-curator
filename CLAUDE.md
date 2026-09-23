@@ -8,7 +8,7 @@ This skill is the authoritative reference for writing SKILL.md files. Any guidan
 
 - Keep the main skill file as the best single source of truth.
 - Prefer cross-tool features and clearly gate any tool-specific behavior.
-- "Skip unless:" gates are non-negotiable for pattern skills.
+- Guidance matches current practice (agentskills.io spec and best practices): goal, constraints with reasons, done criteria, short trigger descriptions. No advice to add emphasis, chain-of-thought prompts or XML tags the model has to emit.
 - Keep the core skill reasonably short; move deep examples into reference files if needed.
 
 ## Testing
