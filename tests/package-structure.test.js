@@ -129,7 +129,7 @@ test("slash command delegates to the skill and keeps the output contract", () =>
   assert.match(fm["allowed-tools"], /Bash\(agnix:\*\)/);
 
   assert.match(command, /skills\/skill-curator\/SKILL\.md/);
-  assert.match(command, /Always output the final skill in a clean markdown code block/);
+  assert.match(command, /Output the final skill in a clean markdown code block/);
   assert.match(command, /realistic trigger-test prompts/);
   assert.doesNotMatch(command, /npm install|npx @agent-sh/);
 });

@@ -1,60 +1,20 @@
 # AGENTS.md for skill-curator
 
-This repository maintains the canonical guidance for writing production-grade skills in the agent-sh / agentsys ecosystem.
+This repository holds the agent-sh guidance for writing SKILL.md files: one skill (`skills/skill-curator/SKILL.md` with `references/`), the `/skill-curator` command, and plugin manifests. It is the counterpart to `system-prompt-curator`.
 
-## Core Mission
+## Working on this repo
 
-Produce skills that:
-- Activate reliably across Claude Code, Cursor, Codex, OpenCode, Kiro and other tools
-- Keep the skill file short and move detail into `references/` when scope is broad
-- Carry what the agent would otherwise get wrong, with reasons, and nothing it already knows
-- Pass `agnix` validation cleanly
-- Remain useful after model upgrades
-
-## When Working on This Repo
-
-- Treat the main `skills/skill-curator/SKILL.md` as the single source of truth for "how to write a skill".
-- Reflect any guidance change in the skill itself before considering the work complete.
-- New examples should be realistic and cross-tool.
-- Keep the core skill well under the spec's 500-line guidance. Use references for deeper material.
-
-## Release Process
-
-1. Update the skill content
-2. Bump version in frontmatter
-3. Update CHANGELOG.md
-4. Run `agnix` on the skill file (must be clean)
-5. Test activation in at least two different agent tools
-6. Tag and release
-
-## Related Work
-
-This skill is the counterpart to `system-prompt-curator`. Together they form the foundation for high-quality agent configuration in the ecosystem.
-
-## Additional maintainer guidance
-
-Follow the Karpathy Guidelines (simplicity, surgical changes, clear success criteria) when editing this plugin.
-
-This skill is the authoritative reference for writing SKILL.md files. Any guidance here must also be reflected in `skills/skill-curator/SKILL.md`.
-
-## Key Constraints
-
-- Keep the main skill file as the best single source of truth.
-- Prefer cross-tool features and clearly gate any tool-specific behavior.
-- Guidance matches current practice (agentskills.io spec and best practices): goal, constraints with reasons, done criteria, short trigger descriptions. No advice to add emphasis, chain-of-thought prompts or XML tags the model has to emit.
-- Keep the core skill reasonably short; move deep examples into reference files if needed.
+- `skills/skill-curator/SKILL.md` is the product and the single source of truth for how to write a skill. A guidance change is done when the skill says it.
+- The guidance follows the agentskills.io spec and current practice: goal, constraints with reasons, done criteria, short trigger descriptions. The skill should not recommend added emphasis, chain-of-thought prompts or XML tags the model has to emit.
+- Skills it produces should trigger reliably across Claude Code, Cursor, Codex, OpenCode and Kiro, carry only what the agent would otherwise get wrong, pass `agnix`, and stay useful after model upgrades.
+- Keep the skill short (the tests cap it at 250 lines) and move depth into `skills/skill-curator/references/`. Examples should be realistic and work across tools; mark any tool-specific behavior as such.
 
 ## Testing
 
-Before considering changes complete:
-- Run `agnix` on the skill (zero errors)
-- Verify it activates on realistic prompts in Claude Code and at least one other tool (Cursor or Codex recommended)
+- `npm test` checks the package, manifest, skill and command contracts.
+- Run `agnix` on the repo (`agnix .`) and fix every error; CI runs it too.
+- For a trigger or description change, check that the skill activates on realistic prompts in Claude Code and one other tool (Cursor or Codex).
 
-## Validation scope
+## Release
 
-Choose checks that cover the changed behavior. For CPU-only tooling, documentation
-and configuration changes, run the relevant CPU tests, static checks and configuration
-validation. Do not require a blanket GPU gate for those changes. Require GPU
-qualification when GPU, runtime or model behavior, or related claims, change.
-Preserve applicable native, model and hardware qualification gates. CPU checks do
-not qualify GPU behavior.
+Bump the version in the skill frontmatter, `package.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` and the tests, update `CHANGELOG.md`, run `npm test` and `agnix .`, then tag and release.

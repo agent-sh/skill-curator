@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- AGENTS.md trimmed for current models: the "single source of truth" rule stated once instead of four times, the GPU validation text and the Karpathy line dropped, and Testing and Release name the checks that exist (`npm test`, `agnix .`) and every file that carries the version.
+- `/skill-curator` command: "Always output the final skill" reads "Output the final skill"; the test pins the same output contract.
+
 ## 1.1.0
 
 - Rewrote the guidance for current models and the Agent Skills spec. The skill now teaches short intent-based trigger descriptions, bodies that carry only what the agent lacks, constraints with reasons, specificity matched to fragility, scripts for deterministic work, and progressive disclosure.

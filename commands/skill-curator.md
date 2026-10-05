@@ -14,7 +14,7 @@ Write the files only when the user asked for them to be written or confirms the 
 
 ## Output
 
-Always output the final skill in a clean markdown code block, followed by:
+Output the final skill in a clean markdown code block, followed by:
 
 - a short critique of the previous version, when improving;
 - recommended `allowed-tools` and a token estimate;
