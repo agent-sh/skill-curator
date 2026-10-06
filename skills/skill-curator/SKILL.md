@@ -1,7 +1,7 @@
 ---
 name: skill-curator
 description: Use when the user wants to create, improve or review a SKILL.md file (Agent Skills format) for any agent tool, including tuning when a skill triggers.
-version: 1.1.0
+version: 1.2.0
 argument-hint: "[skill-purpose or --improve path/to/SKILL.md] [--category implementation|review|research|orchestration|analysis] [--minimal]"
 ---
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [1.2.0] - 2026-10-06
+
 - AGENTS.md trimmed for current models: the "single source of truth" rule stated once instead of four times, the GPU validation text and the Karpathy line dropped, and Testing and Release name the checks that exist (`npm test`, `agnix .`) and every file that carries the version.
 - `/skill-curator` command: "Always output the final skill" reads "Output the final skill"; the test pins the same output contract.
 
