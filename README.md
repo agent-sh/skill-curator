@@ -17,6 +17,13 @@ This plugin provides the canonical reference for creating skills that activate r
 agentsys install skill-curator
 ```
 
+In Claude Code, from this repo's own marketplace:
+
+```bash
+/plugin marketplace add agent-sh/skill-curator
+/plugin install skill-curator@skill-curator
+```
+
 Or clone this repository and link it into your skills directory.
 
 ## Usage
@@ -41,7 +48,6 @@ Good skills are:
 ## Related Plugins
 
 - `system-prompt-curator`: system prompts and agent identity
-- `enhance`: improving existing plugins, agents and prompts
 - `agnix`: the linter that validates your skills
 
 ## Contributing
